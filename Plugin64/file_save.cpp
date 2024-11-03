@@ -856,7 +856,7 @@ namespace FileSave {
 		result |= fileSaveProc3Injector(options);
 		result |= fileSaveProc4Injector(options);
 		result |= fileSaveProc5Injector(options);
-		result |= fileSaveProc6Injector(options);
+		// result |= fileSaveProc6Injector(options);
 		result |= fileSaveProc7Injector(options);
 		result |= fileSaveProc8Injector(options);
 		result |= fileSaveProc9Injector(options);
