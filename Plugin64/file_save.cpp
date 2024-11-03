@@ -566,7 +566,24 @@ namespace FileSave {
 						Injector::MakeJMP(address, fileSaveProc6V137G, true);
 					}
 					else {
-						e.fileSave.unmatchdFileSaveProc6Injector = true;
+						// lea     rdx, aWarOverviewBat ; "WAR_OVERVIEW_BATTLESCORE"
+						// lea     this, [rbp+1D0h+var_238] ; result
+						BytePattern::temp_instance().find_pattern("48 8D 15 41 CB 8E 00 48 8D 4D 98");
+						if (BytePattern::temp_instance().has_size(1, u8"スタート画面でのコンティニューのツールチップ")) {
+							// call    ??$PdxLocalize@AEAY02$$CBDVCString@@@@YA?AVCString@@PEBDAEAY02$$CBD$$QEAV0@@Z ; PdxLocalize<char const (&)[3],CString>(char const *,char const (&)[3],CString &&)
+							// mov     rdx, rax        ; __that
+							uintptr_t address = BytePattern::temp_instance().get_first().address(0x8);
+
+							fileSaveProc6CallAddress = (uintptr_t)utf8ToEscapedStr2;
+
+							// call    sub_140094F60; CUTF8String::operator=(CUTF8String &&)
+							fileSaveProc6ReturnAddress = address + 0x3;
+
+							Injector::MakeJMP(address, fileSaveProc6V137G, true);
+						}
+						else {
+							e.fileSave.unmatchdFileSaveProc6Injector = true;
+						}
 					}
 				}
 			}
@@ -839,7 +856,7 @@ namespace FileSave {
 		result |= fileSaveProc3Injector(options);
 		result |= fileSaveProc4Injector(options);
 		result |= fileSaveProc5Injector(options);
-		result |= fileSaveProc6Injector(options);
+		// result |= fileSaveProc6Injector(options);
 		result |= fileSaveProc7Injector(options);
 		result |= fileSaveProc8Injector(options);
 		result |= fileSaveProc9Injector(options);
